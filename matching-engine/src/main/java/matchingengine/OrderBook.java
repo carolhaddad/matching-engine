@@ -6,5 +6,7 @@ interface OrderBook {
     Order bid();
     Order ask();
     void printBook();
-    //criar um askPrice e um bidPrice
+    double bidPrice();
+    double askPrice();
+    boolean isEmpty(Order.Side side);
 }

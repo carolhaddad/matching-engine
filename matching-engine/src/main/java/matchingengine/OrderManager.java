@@ -3,26 +3,30 @@ package matchingengine;
 import java.util.*;
 
 public class OrderManager {
-    
-    private long id = 1;
-    private long timePriority = 1;
 
+    private long nextId = 1;
+    private long nextTime = 1;
     private Map<Long, Order> orders = new HashMap<>();
 
-    public Order createOrder(Order.Type type, Order.Side side, double price, int qty) {
-        long idProx = id++;
-        timePriority++;
-
-        Order o = new Order(type, side, price, qty, idProx, timePriority);
-        orders.put(id, o);
+    public Order createLimit(Order.Type type, Order.Side side, double price, int qty) {
+        Order o = new Order(type, side, price, qty, nextId++, nextTime++);
+        orders.put(o.getId(), o);
         return o;
     }
 
-    public Order getOrder(long id) {
+    public Order createMarket(Order.Side side, int qty) {
+        return new Order(Order.Type.MARKET, side, -1, qty, nextId++, nextTime++);
+    }
+
+    public Order get(long id) {
         return orders.get(id);
     }
 
-    public void removeOrder(long id) {
+    public void remove(long id) {
         orders.remove(id);
+    }
+
+    public void updateTimePriority(Order o) {
+        o.setTimePriority(nextTime++);
     }
 }
