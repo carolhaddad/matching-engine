@@ -73,12 +73,12 @@ public class Submit {
             o.setQty(newQty);
         }   
 
-        manager.updateTimePriority(o);
+        manager.updateTimePriority(o); // OBS: se mudar tempo
         book.add(o);
     }
 
     private void validate(double price, int qty) {
-        if (qty <= 0)
+        if (qty < 0)
             throw new IllegalArgumentException("Quantity must be positive");
         if (price < 0)
             throw new IllegalArgumentException("Price cannot be negative");

@@ -28,12 +28,12 @@ public class Matcher {
         } else {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.BUY)
                     && book.bidPrice() >= order.getPrice()) {
-                trades.add(executeTrade(book.bid(), order));
+                trades.add(executeTrade(book.bid(), order)); // OBS: "inverter" se usarmos regra do "preço do livro"
             }
         }
 
-        if (order.getQty() > 0) book.add(order);
-        updatePeg();
+        if (order.getQty() > 0) updatePeg();
+        
         return trades;
     }
 
@@ -49,7 +49,7 @@ public class Matcher {
                 trades.add(executeTrade(book.bid(), order));
             }
         }
-        updatePeg();
+
         return trades;
     }
 
@@ -82,12 +82,12 @@ public class Matcher {
         double ask = book.isEmpty(Order.Side.SELL) ? -1 : book.askPrice();
 
         if (bid != lastBid) {
-            pegManager.updateBid(bid, this::matchLimit);
+            pegManager.updateBid(bid);
             lastBid = bid;
         }
 
         if (ask != lastAsk) {
-            pegManager.updateAsk(ask, this::matchLimit);
+            pegManager.updateAsk(ask);
             lastAsk = ask;
         }
     }

@@ -1,7 +1,6 @@
 package matchingengine;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class PegManager {
 
@@ -23,41 +22,23 @@ public class PegManager {
         else pegSell.remove(o);
     }
 
-    public void updateBid(double bid, Consumer<Order> matcher) {
+    public void updateBid(double bid) {
         pegBuy.sort(Comparator.comparingLong(Order::getTimePriority));
-
+  
         for (Order o : new ArrayList<>(pegBuy)) {
             book.remove(o);
             o.setPrice(bid);
-
-            int qntyOriginal = o.getQty();
-
-            matcher.accept(o);
-
-            if (o.getQty() == qntyOriginal) {
-                book.add(o);
-                break;
-            }
+            book.add(o);
         }
     }
 
-
-    public void updateAsk(double ask, Consumer<Order> matchLimit) {
+    public void updateAsk(double ask) {
         pegSell.sort(Comparator.comparingLong(Order::getTimePriority));
 
         for (Order o : new ArrayList<>(pegSell)) {
             book.remove(o);
             o.setPrice(ask);
-
-            int qntyOriginal = o.getQty();
-
-            matchLimit.accept(o);
-
-            if (o.getQty() == qntyOriginal) {
-                book.add(o);
-                break;
-            }
+            book.add(o);
         }
-
     }
 }

@@ -4,10 +4,16 @@ import java.util.*;
 
 public class OrderManager {
 
-    private long nextId = 1;
-    private long nextTime = 1;
-    private Map<Long, Order> orders = new HashMap<>();
+    private long nextId;
+    private long nextTime;
+    private Map<Long, Order> orders;
 
+    public OrderManager() {
+        this.nextId = 1;
+        this.nextTime = 1;
+        this.orders = new HashMap<>();
+    }
+    
     public Order createLimit(Order.Type type, Order.Side side, double price, int qty) {
         Order o = new Order(type, side, price, qty, nextId++, nextTime++);
         orders.put(o.getId(), o);
@@ -26,7 +32,7 @@ public class OrderManager {
         orders.remove(id);
     }
 
-    public void updateTimePriority(Order o) {
+    public void updateTimePriority(Order o) { // OBS: se regra de "mudar prioridade de chegada" for verdade
         o.setTimePriority(nextTime++);
     }
 }

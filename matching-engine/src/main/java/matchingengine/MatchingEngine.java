@@ -3,15 +3,21 @@ package matchingengine;
 import java.util.*;
 
 public class MatchingEngine {
+    private OrderBook book;
+    private OrderManager manager;
+    private PegManager pegManager;
+    private Submit submit;
+    private Matcher matcher;
+    private List<Trade> trades;
 
-    private OrderBook book = new PriorityQueueOrderBook();
-    private OrderManager manager = new OrderManager();
-    private PegManager pegManager = new PegManager(book);
-
-    private Submit submit = new Submit(book, manager, pegManager);
-    private Matcher matcher = new Matcher(book, manager, pegManager);
-
-    private List<Trade> trades = new ArrayList<>();
+    public MatchingEngine() {
+        this.book = new TreeMapOrderBook();
+        this.manager = new OrderManager();
+        this.pegManager = new PegManager(book);
+        this.submit = new Submit(book, manager, pegManager);
+        this.matcher = new Matcher(book, manager, pegManager);
+        this.trades = new ArrayList<>();
+    }
 
     public void submitLimitBuy(double price, int qty) {
         Order o = submit.submitLimitBuy(price, qty);
