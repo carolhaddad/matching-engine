@@ -1,6 +1,9 @@
-package matchingengine;
+package matchingengine.book;
 
 import java.util.*;
+
+import matchingengine.domain.Order;
+import matchingengine.boundary.Price;
 
 public class PriorityQueueOrderBook implements OrderBook {
 
@@ -10,13 +13,13 @@ public class PriorityQueueOrderBook implements OrderBook {
     public PriorityQueueOrderBook() {
         buys = new PriorityQueue<>((a, b) -> {
             if (a.getPrice() != b.getPrice())
-                return Double.compare(b.getPrice(), a.getPrice());
+                return Long.compare(b.getPrice(), a.getPrice());
             return Long.compare(a.getTimePriority(), b.getTimePriority());
         });
 
         sells = new PriorityQueue<>((a, b) -> {
             if (a.getPrice() != b.getPrice())
-                return Double.compare(a.getPrice(), b.getPrice());
+                return Long.compare(a.getPrice(), b.getPrice());
             return Long.compare(a.getTimePriority(), b.getTimePriority());
         });
     }
@@ -34,11 +37,11 @@ public class PriorityQueueOrderBook implements OrderBook {
     public Order bid() { return buys.peek(); }
     public Order ask() { return sells.peek(); }
 
-    public double bidPrice() {
+    public long bidPrice() {
         return buys.isEmpty() ? -1 : buys.peek().getPrice();
     }
 
-    public double askPrice() {
+    public long askPrice() {
         return sells.isEmpty() ? -1 : sells.peek().getPrice();
     }
 
@@ -52,14 +55,14 @@ public class PriorityQueueOrderBook implements OrderBook {
 
         buysList.sort((a, b) -> {
             if (a.getPrice() != b.getPrice()){
-                return Double.compare(b.getPrice(), a.getPrice());
+                return Long.compare(b.getPrice(), a.getPrice());
             }
             return Long.compare(a.getTimePriority(), b.getTimePriority());
         });
 
        sellsList.sort((a, b) -> {
             if (a.getPrice() != b.getPrice()) {
-                return Double.compare(a.getPrice(), b.getPrice());
+                return Long.compare(a.getPrice(), b.getPrice());
             }
             return Long.compare(a.getTimePriority(), b.getTimePriority());
         });
@@ -75,11 +78,11 @@ public class PriorityQueueOrderBook implements OrderBook {
 
             if (i < buysList.size()) {
                 Order buyO = buysList.get(i);
-                buy = String.format("%d @ %.2f", buyO.getQty(), buyO.getPrice());
+                buy = String.format("%d @ %.2f", buyO.getQty(), Price.toDouble(buyO.getPrice()));
             }
             if (i < sellsList.size()) {
                 Order sellO = sellsList.get(i);
-                sell = String.format("%d @ %.2f", sellO.getQty(), sellO.getPrice());
+                sell = String.format("%d @ %.2f", sellO.getQty(), Price.toDouble(sellO.getPrice()));
             }
 
             System.out.printf("%-25s | %-25s%n", buy, sell);

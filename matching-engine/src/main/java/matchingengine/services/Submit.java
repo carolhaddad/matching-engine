@@ -1,4 +1,9 @@
-package matchingengine;
+package matchingengine.services;
+
+import matchingengine.book.OrderBook;
+import matchingengine.domain.Order;
+import matchingengine.manager.OrderManager;
+import matchingengine.manager.PegManager;
 
 public class Submit {
 
@@ -12,14 +17,14 @@ public class Submit {
         this.pegManager = pegManager;
     }
 
-    public Order submitLimitBuy(double price, int qty) {
+    public Order submitLimitBuy(long price, int qty) {
         validate(price, qty);
         Order o = manager.createLimit(Order.Type.LIMIT, Order.Side.BUY, price, qty);
         book.add(o);
         return o;
     }
 
-    public Order submitLimitSell(double price, int qty) {
+    public Order submitLimitSell(long price, int qty) {
         validate(price, qty);
         Order o =  manager.createLimit(Order.Type.LIMIT, Order.Side.SELL, price, qty);
         book.add(o);
@@ -37,7 +42,7 @@ public class Submit {
     }
     public Order submitPegBuy(int qty) {
         validate(1, qty);
-        double price = book.isEmpty(Order.Side.BUY) ? 0 : book.bidPrice();
+        long price = book.isEmpty(Order.Side.BUY) ? 0 : book.bidPrice();
         Order o = manager.createLimit(Order.Type.PEG, Order.Side.BUY, price, qty);
         pegManager.add(o);
         book.add(o);
@@ -45,7 +50,7 @@ public class Submit {
     }
     public Order submitPegSell(int qty) {
         validate(1, qty);
-        double price = book.isEmpty(Order.Side.BUY) ? 0 : book.askPrice();
+        long price = book.isEmpty(Order.Side.BUY) ? 0 : book.askPrice();
         Order o = manager.createLimit(Order.Type.PEG, Order.Side.SELL, price, qty);
         pegManager.add(o);
         book.add(o);
@@ -60,7 +65,7 @@ public class Submit {
         manager.remove(id);
     }
 
-    public void updateOrder(long id, double newPrice, int newQty) {
+    public void updateOrder(long id, long newPrice, int newQty) {
         validate(newPrice, newQty);
         Order o = manager.get(id);
         if (o == null) return;
@@ -77,7 +82,7 @@ public class Submit {
         book.add(o);
     }
 
-    private void validate(double price, int qty) {
+    private void validate(long price, int qty) {
         if (qty < 0)
             throw new IllegalArgumentException("Quantity must be positive");
         if (price < 0)

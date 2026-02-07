@@ -1,6 +1,15 @@
-package matchingengine;
+package matchingengine.facade;
 
 import java.util.*;
+
+import matchingengine.book.OrderBook;
+import matchingengine.book.TreeMapOrderBook;
+import matchingengine.domain.Order;
+import matchingengine.domain.Trade;
+import matchingengine.manager.PegManager;
+import matchingengine.manager.OrderManager;
+import matchingengine.services.Matcher;
+import matchingengine.services.Submit;
 
 public class MatchingEngine {
     private OrderBook book;
@@ -19,12 +28,11 @@ public class MatchingEngine {
         this.trades = new ArrayList<>();
     }
 
-    public void submitLimitBuy(double price, int qty) {
+    public void submitLimitBuy(long price, int qty) {
         Order o = submit.submitLimitBuy(price, qty);
         trades.addAll(matcher.matchLimit(o));
     }
-
-    public void submitLimitSell(double price, int qty) {
+    public void submitLimitSell(long price, int qty) {
         Order o = submit.submitLimitSell(price, qty);
         trades.addAll(matcher.matchLimit(o));
     }
@@ -53,7 +61,7 @@ public class MatchingEngine {
         submit.cancel(id);
     }
 
-    public void updateOrder(long id, double price, int qty){
+    public void updateOrder(long id, long price, int qty){
         submit.updateOrder(id, price, qty);
     }
 

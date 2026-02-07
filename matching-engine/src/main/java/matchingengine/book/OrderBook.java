@@ -1,12 +1,14 @@
-package matchingengine;
+package matchingengine.book;
 
-interface OrderBook {
+import matchingengine.domain.Order;
+
+public interface OrderBook {
     void add(Order o);
     void remove(Order o);
     Order bid();
     Order ask();
     void printBook();
-    double bidPrice();
-    double askPrice();
+    long bidPrice();
+    long askPrice();
     boolean isEmpty(Order.Side side);
 }

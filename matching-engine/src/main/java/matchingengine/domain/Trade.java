@@ -1,4 +1,4 @@
-package matchingengine;
+package matchingengine.domain;
 
 public class Trade {
     private final double price;

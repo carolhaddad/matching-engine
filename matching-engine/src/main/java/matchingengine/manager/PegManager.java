@@ -1,6 +1,9 @@
-package matchingengine;
+package matchingengine.manager;
 
 import java.util.*;
+
+import matchingengine.book.OrderBook;
+import matchingengine.domain.Order;
 
 public class PegManager {
 
@@ -22,7 +25,7 @@ public class PegManager {
         else pegSell.remove(o);
     }
 
-    public void updateBid(double bid) {
+    public void updateBid(long bid) {
         pegBuy.sort(Comparator.comparingLong(Order::getTimePriority));
   
         for (Order o : new ArrayList<>(pegBuy)) {
@@ -32,7 +35,7 @@ public class PegManager {
         }
     }
 
-    public void updateAsk(double ask) {
+    public void updateAsk(long ask) {
         pegSell.sort(Comparator.comparingLong(Order::getTimePriority));
 
         for (Order o : new ArrayList<>(pegSell)) {

@@ -1,6 +1,8 @@
-package matchingengine;
+package matchingengine.manager;
 
 import java.util.*;
+
+import matchingengine.domain.Order;
 
 public class OrderManager {
 
@@ -14,7 +16,7 @@ public class OrderManager {
         this.orders = new HashMap<>();
     }
     
-    public Order createLimit(Order.Type type, Order.Side side, double price, int qty) {
+    public Order createLimit(Order.Type type, Order.Side side, long price, int qty) {
         Order o = new Order(type, side, price, qty, nextId++, nextTime++);
         orders.put(o.getId(), o);
         return o;

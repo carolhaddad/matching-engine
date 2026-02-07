@@ -1,6 +1,12 @@
-package matchingengine;
+package matchingengine.services;
 
 import java.util.*;
+
+import matchingengine.book.OrderBook;
+import matchingengine.domain.Order;
+import matchingengine.domain.Trade;
+import matchingengine.manager.OrderManager;
+import matchingengine.manager.PegManager;
 
 public class Matcher {
 
@@ -8,8 +14,8 @@ public class Matcher {
     private OrderManager manager;
     private PegManager pegManager;
 
-    private double lastBid = -1;
-    private double lastAsk = -1;
+    private long lastBid = -1;
+    private long lastAsk = -1;
 
     public Matcher(OrderBook book, OrderManager manager, PegManager pegManager) {
         this.book = book;
@@ -24,11 +30,15 @@ public class Matcher {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)
                     && book.askPrice() <= order.getPrice()) {
                 trades.add(executeTrade(order, book.ask()));
+                // OBS: se for pela regra do book:
+                //trades.add(executeTradeBook(order, book.ask()));
             }
         } else {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.BUY)
                     && book.bidPrice() >= order.getPrice()) {
-                trades.add(executeTrade(book.bid(), order)); // OBS: "inverter" se usarmos regra do "preço do livro"
+                trades.add(executeTrade(book.bid(), order)); 
+                // OBS: se for pela regra do book:
+                //trades.add(executeTradeBook(order, book.bid()));
             }
         }
 
@@ -43,10 +53,14 @@ public class Matcher {
         if (order.getSide() == Order.Side.BUY) {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)) {
                 trades.add(executeTrade(order, book.ask()));
+                // OBS: se for pela regra do book:
+                //trades.add(executeTradeBook(order, book.ask()));
             }
         } else {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.BUY)) {
                 trades.add(executeTrade(book.bid(), order));
+                // OBS: se for pela regra do book:
+                //trades.add(executeTradeBook(order, book.bid()));
             }
         }
 
@@ -55,7 +69,7 @@ public class Matcher {
 
     private Trade executeTrade(Order buy, Order sell) {
         int qty = Math.min(buy.getQty(), sell.getQty());
-        double price = sell.getPrice();
+        long price = sell.getPrice();
 
         buy.setQty(buy.getQty() - qty);
         sell.setQty(sell.getQty() - qty);
@@ -77,9 +91,38 @@ public class Matcher {
     }
 
 
+   /* OBS: se for pela regra do book
+    private Trade executeTradeBook(Order newO, Order bookO) {
+        int qty = Math.min(newO.getQty(), bookO.getQty());
+        long price = bookO.getPrice();
+
+        newO.setQty(newO.getQty() - qty);
+        bookO.setQty(bookO.getQty() - qty);
+
+
+        if (newO.getQty() == 0) {
+            book.remove(newO);
+            manager.remove(newO.getId());
+            pegManager.remove(newO);
+        }
+
+        if (bookO.getQty() == 0) {
+            book.remove(bookO);
+            manager.remove(bookO.getId());
+            pegManager.remove(bookO);
+        }
+
+        long buyId  = newO.getSide() == Order.Side.BUY ? newO.getId() : bookO.getId();
+        long sellId = newO.getSide() == Order.Side.SELL ? newO.getId() : bookO.getId();
+
+
+        return new Trade(price, qty, buyId, sellId);
+    }
+*/
+
     private void updatePeg() {
-        double bid = book.isEmpty(Order.Side.BUY) ? -1 : book.bidPrice();
-        double ask = book.isEmpty(Order.Side.SELL) ? -1 : book.askPrice();
+        long bid = book.isEmpty(Order.Side.BUY) ? -1 : book.bidPrice();
+        long ask = book.isEmpty(Order.Side.SELL) ? -1 : book.askPrice();
 
         if (bid != lastBid) {
             pegManager.updateBid(bid);
