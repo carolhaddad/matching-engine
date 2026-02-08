@@ -14,9 +14,6 @@ public class Matcher {
     private OrderManager manager;
     private PegManager pegManager;
 
-    private long lastBid = -1;
-    private long lastAsk = -1;
-
     public Matcher(OrderBook book, OrderManager manager, PegManager pegManager) {
         this.book = book;
         this.manager = manager;
@@ -42,8 +39,7 @@ public class Matcher {
             }
         }
 
-        if (order.getQty() > 0) updatePeg();
-        
+       
         return trades;
     }
 
@@ -120,19 +116,5 @@ public class Matcher {
     }
 */
 
-    private void updatePeg() {
-        long bid = book.isEmpty(Order.Side.BUY) ? -1 : book.bidPrice();
-        long ask = book.isEmpty(Order.Side.SELL) ? -1 : book.askPrice();
-
-        if (bid != lastBid) {
-            pegManager.updateBid(bid);
-            lastBid = bid;
-        }
-
-        if (ask != lastAsk) {
-            pegManager.updateAsk(ask);
-            lastAsk = ask;
-        }
-    }
 }
 

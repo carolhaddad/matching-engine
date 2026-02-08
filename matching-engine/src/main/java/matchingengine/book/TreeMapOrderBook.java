@@ -51,7 +51,7 @@ public class TreeMapOrderBook implements OrderBook {
 
     public void printBook() {
         System.out.printf("%-25s | %-25s%n", "Ordens de Compra", "Ordens de Venda");
-        System.out.println("---------------------------+---------------------------");
+        System.out.println("-------------------------+---------------------------");
 
         List<Order> buysList = new ArrayList<>();
         for (LinkedList<Order> level : buys.values()) buysList.addAll(level);

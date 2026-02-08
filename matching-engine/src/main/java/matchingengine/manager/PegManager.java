@@ -25,9 +25,7 @@ public class PegManager {
         else pegSell.remove(o);
     }
 
-    public void updateBid(long bid) {
-        pegBuy.sort(Comparator.comparingLong(Order::getTimePriority));
-  
+    public void updateBid(long bid) { 
         for (Order o : new ArrayList<>(pegBuy)) {
             book.remove(o);
             o.setPrice(bid);
@@ -36,8 +34,6 @@ public class PegManager {
     }
 
     public void updateAsk(long ask) {
-        pegSell.sort(Comparator.comparingLong(Order::getTimePriority));
-
         for (Order o : new ArrayList<>(pegSell)) {
             book.remove(o);
             o.setPrice(ask);
