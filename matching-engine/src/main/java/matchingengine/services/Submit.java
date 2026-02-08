@@ -50,7 +50,7 @@ public class Submit {
     }
     public Order submitPegSell(int qty) {
         validate(1, qty);
-        long price = book.isEmpty(Order.Side.BUY) ? 0 : book.askPrice();
+        long price = book.isEmpty(Order.Side.SELL) ? 0 : book.askPrice();
         Order o = manager.createLimit(Order.Type.PEG, Order.Side.SELL, price, qty);
         pegManager.add(o);
         book.add(o);
@@ -83,7 +83,7 @@ public class Submit {
     }
 
     private void validate(long price, int qty) {
-        if (qty < 0)
+        if (qty <= 0)
             throw new IllegalArgumentException("Quantity must be positive");
         if (price < 0)
             throw new IllegalArgumentException("Price cannot be negative");
