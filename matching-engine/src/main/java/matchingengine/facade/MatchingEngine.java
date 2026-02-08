@@ -38,14 +38,21 @@ public class MatchingEngine {
     }
 
     public void submitLimitBid(long price, int qty) {
-        Order o = submit.submitLimitBuy(price, qty);
+        long bid = book.isEmpty(Order.Side.BUY) ? price : book.bidPrice();
+        long finalPrice = Math.max(price, bid);
+
+        Order o = submit.submitLimitBuy(finalPrice, qty);
         trades.addAll(matcher.matchLimit(o));
         if (o.getQty() > 0) {
             pegManager.updateBid(o.getPrice());
         }
+
     }
     public void submitLimitAsk(long price, int qty) {
-        Order o = submit.submitLimitSell(price, qty);
+        long ask = book.isEmpty(Order.Side.SELL) ? price : book.askPrice();
+        long finalPrice = Math.min(price, ask);
+
+        Order o = submit.submitLimitSell(finalPrice, qty);
         trades.addAll(matcher.matchLimit(o));
         if (o.getQty() > 0) {
             pegManager.updateAsk(o.getPrice());
