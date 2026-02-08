@@ -31,10 +31,17 @@ public class MatchingEngine {
     public void submitLimitBuy(long price, int qty) {
         Order o = submit.submitLimitBuy(price, qty);
         trades.addAll(matcher.matchLimit(o));
+        if (o.getQty() > 0) {
+            pegManager.updateBid(o.getPrice());
+        }
+
     }
     public void submitLimitSell(long price, int qty) {
         Order o = submit.submitLimitSell(price, qty);
         trades.addAll(matcher.matchLimit(o));
+        if (o.getQty() > 0) {
+            pegManager.updateAsk(o.getPrice());
+        }        
     }
 
     public void submitLimitBid(long price, int qty) {
