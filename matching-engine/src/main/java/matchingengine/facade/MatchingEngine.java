@@ -5,11 +5,11 @@ import java.util.*;
 import matchingengine.book.OrderBook;
 import matchingengine.book.TreeMapOrderBook;
 import matchingengine.domain.Order;
-import matchingengine.domain.Trade;
 import matchingengine.manager.PegManager;
 import matchingengine.manager.OrderManager;
 import matchingengine.services.Matcher;
 import matchingengine.services.Submit;
+import matchingengine.dto.*;
 
 public class MatchingEngine {
     private OrderBook book;
@@ -17,7 +17,6 @@ public class MatchingEngine {
     private PegManager pegManager;
     private Submit submit;
     private Matcher matcher;
-    private List<Trade> trades;
 
     public MatchingEngine() {
         this.book = new TreeMapOrderBook();
@@ -25,81 +24,83 @@ public class MatchingEngine {
         this.pegManager = new PegManager(book);
         this.submit = new Submit(book, manager, pegManager);
         this.matcher = new Matcher(book, manager, pegManager);
-        this.trades = new ArrayList<>();
     }
 
-    public void submitLimitBuy(long price, int qty) {
+    public SubmitResult submitLimitBuy(long price, int qty) {
         Order o = submit.submitLimitBuy(price, qty);
-        trades.addAll(matcher.matchLimit(o));
+        List<TradeResult> trades = matcher.matchLimit(o);
         if (o.getQty() > 0) {
             pegManager.updateBid(o.getPrice());
         }
-
+        return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
-    public void submitLimitSell(long price, int qty) {
+    public SubmitResult submitLimitSell(long price, int qty) {
         Order o = submit.submitLimitSell(price, qty);
-        trades.addAll(matcher.matchLimit(o));
+        List<TradeResult> trades = matcher.matchLimit(o);
         if (o.getQty() > 0) {
             pegManager.updateAsk(o.getPrice());
         }        
+        return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
 
-    public void submitLimitBid(long price, int qty) {
+    public SubmitResult submitLimitBid(long price, int qty) {
         long bid = book.isEmpty(Order.Side.BUY) ? price : book.bidPrice();
         long finalPrice = Math.max(price, bid);
 
         Order o = submit.submitLimitBuy(finalPrice, qty);
-        trades.addAll(matcher.matchLimit(o));
+        List<TradeResult> trades = matcher.matchLimit(o);
         if (o.getQty() > 0) {
             pegManager.updateBid(o.getPrice());
         }
-
+    return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
-    public void submitLimitAsk(long price, int qty) {
+    public SubmitResult submitLimitAsk(long price, int qty) {
         long ask = book.isEmpty(Order.Side.SELL) ? price : book.askPrice();
         long finalPrice = Math.min(price, ask);
 
         Order o = submit.submitLimitSell(finalPrice, qty);
-        trades.addAll(matcher.matchLimit(o));
+        List<TradeResult> trades = matcher.matchLimit(o);
         if (o.getQty() > 0) {
             pegManager.updateAsk(o.getPrice());
         }
-
+    return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
 
-    public void submitMarketBuy(int qty) {
+    public SubmitResult submitMarketBuy(int qty) {
         Order o = submit.submitMarketBuy(qty);
-        trades.addAll(matcher.matchMarket(o));
+        List<TradeResult> trades = matcher.matchMarket(o);
+        return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
 
-    public void submitMarketSell(int qty) {
+    public SubmitResult submitMarketSell(int qty) {
         Order o = submit.submitMarketSell(qty);
-        trades.addAll(matcher.matchMarket(o));
+        List<TradeResult> trades =matcher.matchMarket(o);
+        return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
 
-    public void submitPegBuy(int qty) {
+    public SubmitResult submitPegBuy(int qty) {
         Order o = submit.submitPegBuy(qty);
-        trades.addAll(matcher.matchLimit(o));
+        List<TradeResult> trades = matcher.matchLimit(o);
+        return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
 
-    public void submitPegSell(int qty) {
+    public SubmitResult submitPegSell(int qty) {
         Order o = submit.submitPegSell(qty);
-        trades.addAll(matcher.matchLimit(o));
+        List<TradeResult> trades = matcher.matchLimit(o);
+        return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
 
-    public void cancelOrder(long id) {
-        submit.cancel(id);
+    public CancelResult cancelOrder(long id) {
+        return submit.cancel(id);
     }
 
-    public void updateOrder(long id, long price, int qty){
-        submit.updateOrder(id, price, qty);
+    public ModifyResult updateOrder(long id, long price, int qty){
+        boolean modified = submit.updateOrder(id, price, qty);
+        return new ModifyResult(id, modified, price, qty);
     }
 
-    public List<Trade> getTrades() {
-        return trades;
-    }
 
-    public void printBook() {
-        book.printBook();
+    public BookSnapshot printBook() {
+        return book.printBook();
     }
 }

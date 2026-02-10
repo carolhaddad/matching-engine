@@ -4,9 +4,9 @@ import java.util.*;
 
 import matchingengine.book.OrderBook;
 import matchingengine.domain.Order;
-import matchingengine.domain.Trade;
 import matchingengine.manager.OrderManager;
 import matchingengine.manager.PegManager;
+import matchingengine.dto.TradeResult;
 
 public class Matcher {
 
@@ -20,8 +20,8 @@ public class Matcher {
         this.pegManager = pegManager;
     }
 
-    public List<Trade> matchLimit(Order order) {
-        List<Trade> trades = new ArrayList<>();
+    public List<TradeResult> matchLimit(Order order) {
+        List<TradeResult> trades = new ArrayList<>();
 
         if (order.getSide() == Order.Side.BUY) {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)
@@ -39,8 +39,8 @@ public class Matcher {
         return trades;
     }
 
-    public List<Trade> matchMarket(Order order) {
-        List<Trade> trades = new ArrayList<>();
+    public List<TradeResult> matchMarket(Order order) {
+        List<TradeResult> trades = new ArrayList<>();
 
         if (order.getSide() == Order.Side.BUY) {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)) {
@@ -55,7 +55,7 @@ public class Matcher {
         return trades;
     }
 
-    private Trade executeTradeBook(Order newO, Order bookO) {
+    private TradeResult executeTradeBook(Order newO, Order bookO) {
         int qty = Math.min(newO.getQty(), bookO.getQty());
         long price = bookO.getPrice();
 
@@ -75,11 +75,7 @@ public class Matcher {
             pegManager.remove(bookO);
         }
 
-        long buyId  = newO.getSide() == Order.Side.BUY ? newO.getId() : bookO.getId();
-        long sellId = newO.getSide() == Order.Side.SELL ? newO.getId() : bookO.getId();
-
-
-        return new Trade(price, qty, buyId, sellId);
+        return new TradeResult(price, qty);
     }
 }
 

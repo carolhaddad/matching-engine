@@ -2,6 +2,7 @@ package matchingengine.services;
 
 import matchingengine.book.OrderBook;
 import matchingengine.domain.Order;
+import matchingengine.dto.CancelResult;
 import matchingengine.manager.OrderManager;
 import matchingengine.manager.PegManager;
 
@@ -57,18 +58,19 @@ public class Submit {
         return o;
     }
 
-    public void cancel(long id) {
+    public CancelResult cancel(long id) {
         Order o = manager.get(id);
-        if (o == null) return;
+        if (o == null) return new CancelResult(id, false);
         book.remove(o);
         pegManager.remove(o);
         manager.remove(id);
+        return new CancelResult(o.getId(), true);
     }
 
-    public void updateOrder(long id, long newPrice, int newQty) {
+    public boolean updateOrder(long id, long newPrice, int newQty) {
         validate(newPrice, newQty);
         Order o = manager.get(id);
-        if (o == null) return;
+        if (o == null) return false;
         book.remove(o);
 
         if (o.getType() == Order.Type.PEG) {
@@ -80,6 +82,7 @@ public class Submit {
 
         manager.updateTimePriority(o); 
         book.add(o);
+        return true;
     }
 
     private void validate(long price, int qty) {

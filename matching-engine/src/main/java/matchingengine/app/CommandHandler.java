@@ -1,6 +1,7 @@
 package matchingengine.app;
 
 import matchingengine.boundary.Price;
+import matchingengine.dto.*;
 import matchingengine.facade.MatchingEngine;
 
 public class CommandHandler {
@@ -49,22 +50,43 @@ public class CommandHandler {
     private static void limit(String[] s, MatchingEngine engine) {
 
         if (s.length == 4 && s[1].equals("buy")) {
-            engine.submitLimitBuy(price(s[2]), qty(s[3]));
+            SubmitResult result = engine.submitLimitBuy(price(s[2]), qty(s[3]));
+             if (result.qnty() > 0) System.out.println("Order created: buy " + result.qnty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
+            
             return;
         }
 
         if (s.length == 4 && s[1].equals("sell")) {
-            engine.submitLimitSell(price(s[2]), qty(s[3]));
+            SubmitResult result = engine.submitLimitSell(price(s[2]), qty(s[3]));
+            if (result.qnty() > 0) System.out.println("Order created: sell " + result.qnty()+ " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
         if (s.length == 5 && s[1].equals("bid") && s[2].equals("buy")) {
-            engine.submitLimitBid(price(s[3]), qty(s[4]));
+            SubmitResult result = engine.submitLimitBid(price(s[3]), qty(s[4]));
+             if (result.qnty() > 0) System.out.println("Order created: limit bid " + result.qnty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
         if (s.length == 5 && s[1].equals("ask") && s[2].equals("sell")) {
-            engine.submitLimitAsk(price(s[3]), qty(s[4]));
+            SubmitResult result = engine.submitLimitAsk(price(s[3]), qty(s[4]));
+             if (result.qnty() > 0) System.out.println("Order created: limit ask " + result.qnty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
@@ -74,12 +96,20 @@ public class CommandHandler {
     private static void market(String[] s, MatchingEngine engine) {
 
         if (s.length == 3 && s[1].equals("buy")) {
-            engine.submitMarketBuy(qty(s[2]));
+            SubmitResult result = engine.submitMarketBuy(qty(s[2]));
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
         if (s.length == 3 && s[1].equals("sell")) {
-            engine.submitMarketSell(qty(s[2]));
+            SubmitResult result = engine.submitMarketSell(qty(s[2]));
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
@@ -90,12 +120,22 @@ public class CommandHandler {
     private static void peg(String[] s, MatchingEngine engine) {
 
         if (s.length == 4 && s[1].equals("bid") && s[2].equals("buy")) {
-            engine.submitPegBuy(qty(s[3]));
+            SubmitResult result = engine.submitPegBuy(qty(s[3]));
+             if (result.qnty() > 0) System.out.println("Order created: peg buy " + result.qnty() + " id " + result.orderId());
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
         if (s.length == 4 && s[1].equals("ask") && s[2].equals("sell")) {
-            engine.submitPegSell(qty(s[3]));
+            SubmitResult result = engine.submitPegSell(qty(s[3]));
+             if (result.qnty() > 0) System.out.println("Order created: peg sell "  + result.qnty() + " id " + result.orderId());
+
+            for (TradeResult t : result.trades()) {
+                System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
+            }
             return;
         }
 
@@ -105,25 +145,37 @@ public class CommandHandler {
     private static void cancel(String[] s, MatchingEngine engine) {
 
         if (s.length == 3 && s[1].equals("order")) {
-            engine.cancelOrder(id(s[2]));
-            return;
+            CancelResult result = engine.cancelOrder(id(s[2]));
+            if (result.cancelled() == true){
+                System.out.println("Order Cancelled");
+                return;
+            } 
+            throw new InvalidCommandException("Id inexistente");
         }
 
         throw new InvalidCommandException("Entrada inválida para cancel");
     }
 
     private static void modify(String[] s, MatchingEngine engine) {
-       if (s.length == 5 && s[1].equals("order")) {
-            engine.updateOrder(id(s[2]), price(s[3]), qty(s[4]));
-            return;
+        if (s.length == 5 && s[1].equals("order")) {
+            ModifyResult result = engine.updateOrder(id(s[2]), price(s[3]), qty(s[4]));
+
+            if (result.success()) {
+                System.out.println("Order id " + result.orderId() + " Modified");
+                return;
+            }
+
+            throw new InvalidCommandException("Id inexistente");
         }
 
         throw new InvalidCommandException("Entrada inválida para modify");
     }
 
+
     private static void print(String[] s, MatchingEngine engine) {
         if (s.length == 2 && s[1].equals("book")) {
-            engine.printBook();
+            BookSnapshot snap = engine.printBook();
+            printSnapshot(snap);
             return;
         }
 
@@ -135,20 +187,26 @@ public class CommandHandler {
     }
 
     private static long price(String s) {
-        try {
-            return Price.toTicks(Double.parseDouble(s));
-        } catch (Exception e) {
-            throw new InvalidCommandException("Preço inválido");
-        }
+    try {
+        long p = Price.toTicks(Double.parseDouble(s));
+        if (p > 0) return p;
+        throw new InvalidCommandException("Preço inválido");
+    } catch (Exception e) {
+        throw new InvalidCommandException("Preço inválido");
     }
+}
+
 
     private static int qty(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (Exception e) {
-            throw new InvalidCommandException("Quantidade inválida");
-        }
+    try {
+        int i = Integer.parseInt(s);
+        if (i > 0) return i;
+        throw new InvalidCommandException("Quantidade inválida");
+    } catch (NumberFormatException e) {
+        throw new InvalidCommandException("Quantidade inválida");
     }
+}
+
 
     private static long id(String s) {
         try {
@@ -157,4 +215,29 @@ public class CommandHandler {
             throw new InvalidCommandException("ID inválido");
         }
     }
+
+    private static void printSnapshot(BookSnapshot snap) {
+    System.out.printf("%-25s | %-25s%n", "Ordens de Compra", "Ordens de Venda");
+    System.out.println("--------------------------+---------------------------");
+
+    int i = 0;
+    while (i < snap.buys.size() || i < snap.sells.size()) {
+        String buy = "";
+        String sell = "";
+
+        if (i < snap.buys.size()) {
+            var b = snap.buys.get(i);
+            buy = String.format("%d @ %.2f", b.qty, Price.toDouble(b.price));
+        }
+
+        if (i < snap.sells.size()) {
+            var s = snap.sells.get(i);
+            sell = String.format("%d @ %.2f", s.qty, Price.toDouble(s.price));
+        }
+
+        System.out.printf("%-25s | %-25s%n", buy, sell);
+        i++;
+    }
+}
+
 }

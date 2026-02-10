@@ -15,7 +15,6 @@ public class Main
         while (sc.hasNextLine()) {
             try {
                 CommandHandler.execute(sc.nextLine(), engine);
-                //engine.printBook();
             } catch (InvalidCommandException e) {
                 System.out.println("Erro: " + e.getMessage());
             }

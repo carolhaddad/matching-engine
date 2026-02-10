@@ -3,6 +3,7 @@ package matchingengine.book;
 import java.util.*;
 
 import matchingengine.domain.Order;
+import matchingengine.dto.BookSnapshot;
 import matchingengine.boundary.Price;
 
 public class PriorityQueueOrderBook implements OrderBook {
@@ -49,7 +50,7 @@ public class PriorityQueueOrderBook implements OrderBook {
         return side == Order.Side.BUY ? buys.isEmpty() : sells.isEmpty();
     }
 
-    public void printBook() {
+    public BookSnapshot printBook() {
         List<Order> buysList = new ArrayList<>(buys);
         List<Order> sellsList = new ArrayList<>(sells);
 
@@ -72,7 +73,7 @@ public class PriorityQueueOrderBook implements OrderBook {
 
         int max = Math.max(buysList.size(), sellsList.size());
 
-        for (int i = 0; i < max; i++) {
+        for (int i = 0; i < max;) {
             String buy = "";
             String sell = "";
 
@@ -86,6 +87,8 @@ public class PriorityQueueOrderBook implements OrderBook {
             }
 
             System.out.printf("%-25s | %-25s%n", buy, sell);
+            return new BookSnapshot(null, null);
         }
+        return null;
     }
 }
