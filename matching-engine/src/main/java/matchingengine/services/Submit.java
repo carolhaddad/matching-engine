@@ -78,7 +78,7 @@ public class Submit {
             o.setQty(newQty);
         }   
 
-        manager.updateTimePriority(o); // OBS: se mudar tempo
+        manager.updateTimePriority(o); 
         book.add(o);
     }
 

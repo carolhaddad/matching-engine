@@ -29,5 +29,5 @@ public class Order {
 
     public void setPrice(long price) { this.price = price; }
     public void setQty(int qty) { this.qty = qty; }
-    public void setTimePriority(long timePriority) {this.timePriority = timePriority;} // OBS: se mudar prioridade
+    public void setTimePriority(long timePriority) {this.timePriority = timePriority;} 
 }

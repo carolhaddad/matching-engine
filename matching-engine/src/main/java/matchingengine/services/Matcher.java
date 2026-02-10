@@ -26,16 +26,12 @@ public class Matcher {
         if (order.getSide() == Order.Side.BUY) {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)
                     && book.askPrice() <= order.getPrice()) {
-                trades.add(executeTrade(order, book.ask()));
-                // OBS: se for pela regra do book:
-                //trades.add(executeTradeBook(order, book.ask()));
+                  trades.add(executeTradeBook(order, book.ask()));
             }
         } else {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.BUY)
                     && book.bidPrice() >= order.getPrice()) {
-                trades.add(executeTrade(book.bid(), order)); 
-                // OBS: se for pela regra do book:
-                //trades.add(executeTradeBook(order, book.bid()));
+                trades.add(executeTradeBook(order, book.bid()));
             }
         }
 
@@ -48,46 +44,17 @@ public class Matcher {
 
         if (order.getSide() == Order.Side.BUY) {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)) {
-                trades.add(executeTrade(order, book.ask()));
-                // OBS: se for pela regra do book:
-                //trades.add(executeTradeBook(order, book.ask()));
+                trades.add(executeTradeBook(order, book.ask()));
             }
         } else {
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.BUY)) {
-                trades.add(executeTrade(book.bid(), order));
-                // OBS: se for pela regra do book:
-                //trades.add(executeTradeBook(order, book.bid()));
+               trades.add(executeTradeBook(order, book.bid()));
             }
         }
 
         return trades;
     }
 
-    private Trade executeTrade(Order buy, Order sell) {
-        int qty = Math.min(buy.getQty(), sell.getQty());
-        long price = sell.getPrice();
-
-        buy.setQty(buy.getQty() - qty);
-        sell.setQty(sell.getQty() - qty);
-
-
-        if (buy.getQty() == 0) {
-            book.remove(buy);
-            manager.remove(buy.getId());
-            pegManager.remove(buy);
-        }
-
-        if (sell.getQty() == 0) {
-            book.remove(sell);
-            manager.remove(sell.getId());
-            pegManager.remove(sell);
-        }
-        
-        return new Trade(price, qty, buy.getId(), sell.getId());
-    }
-
-
-   /* OBS: se for pela regra do book
     private Trade executeTradeBook(Order newO, Order bookO) {
         int qty = Math.min(newO.getQty(), bookO.getQty());
         long price = bookO.getPrice();
@@ -114,7 +81,5 @@ public class Matcher {
 
         return new Trade(price, qty, buyId, sellId);
     }
-*/
-
 }
 

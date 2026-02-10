@@ -34,7 +34,7 @@ public class OrderManager {
         orders.remove(id);
     }
 
-    public void updateTimePriority(Order o) { // OBS: se regra de "mudar prioridade de chegada" for verdade
+    public void updateTimePriority(Order o) { 
         o.setTimePriority(nextTime++);
     }
 }
