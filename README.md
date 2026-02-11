@@ -92,6 +92,7 @@ Trade executed: price=20, qty=150
   - Prioridade temporal em **O(log N)**
 - Market orders geram IDs, mas **não entram no livro**
 - Uso do **Facade Pattern** para orquestrar o sistema
+- Peg orders sem referência possuem preço zero
 
 ---
 
@@ -100,6 +101,17 @@ Trade executed: price=20, qty=150
 - **TreeMap** para níveis de preço
 - **PriorityQueue** para time-priority
 - **HashMap** para lookup de ordens por ID
+
+---
+
+## Análise de Complexidade
+
+- Inserção de ordens Limit/Peg: **O(log N)**  
+  (TreeMap + inserção em heap)
+- Execução de matching: **O(log N)**
+  (melhor preço + heap pop)
+- Cancelamento e Modificação: **O(N)**  
+- Consulta de melhor bid/ask: **O(log N)**
 
 ---
 
