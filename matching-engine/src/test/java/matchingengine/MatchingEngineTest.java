@@ -54,6 +54,23 @@ public class MatchingEngineTest {
     }
 
     @Test
+    void testMarketBuyExtra() {
+        engine.submitLimitSell(2000, 100);
+        SubmitResult result = engine.submitMarketBuy(130);
+
+        List<TradeResult> trades = result.trades();
+
+        assertEquals(1, trades.size());
+        assertEquals(100, trades.get(0).qty());
+        assertEquals(2000, trades.get(0).price());
+
+        BookSnapshot snap = engine.printBook();
+        assertTrue(snap.buys.isEmpty());
+        assertTrue(snap.sells.isEmpty());
+        
+    }
+
+    @Test
     void testMarketSell() {
         engine.submitLimitBuy(1500, 100);
         SubmitResult result = engine.submitMarketSell(60);
@@ -281,6 +298,7 @@ void pegWithoutReference() {
     SubmitResult res = engine.submitPegSell(100);
     assertEquals(0, res.price());
 }
+
 
 
 
