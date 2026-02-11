@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="matchingengine.MatchingEngineTest" time="0.065" tests="23" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="matchingengine.OrderBookTest" time="0.004" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,27 +58,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testModifyOrder" classname="matchingengine.MatchingEngineTest" time="0.024"/>
-  <testcase name="testSubmitLimitBuyWithoutTradeAppearsInBook" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testModifyPriceLosesTimePriority" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testCancelNonExistingOrderReturnsFalse" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testBookSnapshot" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testOrderCancelledIsRemovedFromBook" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testSnapshotIsImmutable" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testSnapshotOnEmptyBook" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testModifyexecutedOrderFails" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testMarketBestSell" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testMarketBuy" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testModifyNonExistingOrderFails" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testPricePriority" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testTimePriority" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="pegWithoutReference" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testSubmitLimitBuyParcialTradeAppearsInBook" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testMarketSell" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testMarketBuyExtra" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testCancelAlreadyExecutedOrderReturnsFalse" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testLimitBuyAndSellMatch" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testOrderFullyExecutedIsRemovedFromBook" classname="matchingengine.MatchingEngineTest" time="0.0"/>
-  <testcase name="testPriceTimePriority" classname="matchingengine.MatchingEngineTest" time="0.001"/>
-  <testcase name="testCancelOrder" classname="matchingengine.MatchingEngineTest" time="0.001"/>
+  <testcase name="marketSellDontBook" classname="matchingengine.OrderBookTest" time="0.001"/>
+  <testcase name="testBestBidAndAsk" classname="matchingengine.OrderBookTest" time="0.0"/>
+  <testcase name="negativeNumber" classname="matchingengine.OrderBookTest" time="0.0"/>
 </testsuite>

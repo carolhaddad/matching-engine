@@ -72,6 +72,11 @@ Order created: sell 200 @ 20 id 1
 market buy 150
 Trade executed: price=20, qty=150
 
+limit sell 10 100
+Order created: sell 100 @ 10 id 2
+
+cancel order 2
+Order 2 canceled
 
 ---
 
@@ -83,7 +88,10 @@ Trade executed: price=20, qty=150
 - Preço do trade é o preço da ordem presente no livro
 - Peg orders **não perdem prioridade temporal** ao atualizar preço  
   Modify orders **perdem prioridade**
-- `limit bid` / `limit ask` são ajustadas ao bid/ask atual caso tenham preços piores
+- limit bid buy <price> <qty>:
+  - Caso o preço informado seja inferior ao melhor bid atual, ele é ajustado para o melhor bid.
+- limit ask sell <price> <qty>:
+  - Caso o preço informado seja superior ao melhor ask atual,ele é ajustado para o melhor ask.
 - Preços representados como `long` (centavos) para evitar erros de ponto flutuante
 - Modify não permite alterar o preço de ordens Peg
 - Order Book implementado com  
@@ -92,7 +100,10 @@ Trade executed: price=20, qty=150
   - Prioridade temporal em **O(log N)**
 - Market orders geram IDs, mas **não entram no livro**
 - Uso do **Facade Pattern** para orquestrar o sistema
-- Peg orders sem referência possuem preço zero
+- Peg bid buy acompanha o melhor bid.
+- Peg ask sell acompanha o melhor ask.
+- Se não houver referência no livro, o preço inicial é 0.
+- Atualizações de preço não disparam trades.
 
 ---
 
@@ -110,8 +121,9 @@ Trade executed: price=20, qty=150
   (TreeMap + inserção em heap)
 - Execução de matching: **O(log N)**
   (melhor preço + heap pop)
-- Cancelamento e Modificação: **O(N)**  
-- Consulta de melhor bid/ask: **O(log N)**
+- Cancelamento e Modificação:
+  - Lookup por ID: O(1)
+  - Remoção do heap: O(N)
 
 ---
 
@@ -133,13 +145,7 @@ Testes unitários, de integração e de erro com **JUnit 5**, cobrindo:
 
 ## Limitações
 
-- Sem latência real
-- Sem persistência
-- Sem múltiplos mercados
-- Sem concorrência (thread-safe)
-- Sem validações regulatórias
-- Modify e Peg updates não disparam trades
-- Escopo limitado ao exercício proposto
+Este projeto simula apenas o core matching engine, não contemplando aspectos de infraestrutura como persistência, concorrência ou latência real.
 
 ---
 
@@ -148,6 +154,17 @@ Testes unitários, de integração e de erro com **JUnit 5**, cobrindo:
 - **Java 17**
 - **Maven**
 - **JUnit 5**
+
+---
+
+## Como rodar
+mvn clean compile
+mvn exec:java
+
+---
+
+## Como testar
+mvn test
 
 ---
 

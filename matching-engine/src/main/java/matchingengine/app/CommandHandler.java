@@ -51,7 +51,7 @@ public class CommandHandler {
 
         if (s.length == 4 && s[1].equals("buy")) {
             SubmitResult result = engine.submitLimitBuy(price(s[2]), qty(s[3]));
-             if (result.qnty() > 0) System.out.println("Order created: buy " + result.qnty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+             if (result.qty() > 0) System.out.println("Order created: buy " + result.qty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -62,7 +62,7 @@ public class CommandHandler {
 
         if (s.length == 4 && s[1].equals("sell")) {
             SubmitResult result = engine.submitLimitSell(price(s[2]), qty(s[3]));
-            if (result.qnty() > 0) System.out.println("Order created: sell " + result.qnty()+ " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+            if (result.qty() > 0) System.out.println("Order created: sell " + result.qty()+ " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -72,7 +72,7 @@ public class CommandHandler {
 
         if (s.length == 5 && s[1].equals("bid") && s[2].equals("buy")) {
             SubmitResult result = engine.submitLimitBid(price(s[3]), qty(s[4]));
-             if (result.qnty() > 0) System.out.println("Order created: limit bid " + result.qnty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+             if (result.qty() > 0) System.out.println("Order created: limit bid " + result.qty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -82,7 +82,7 @@ public class CommandHandler {
 
         if (s.length == 5 && s[1].equals("ask") && s[2].equals("sell")) {
             SubmitResult result = engine.submitLimitAsk(price(s[3]), qty(s[4]));
-             if (result.qnty() > 0) System.out.println("Order created: limit ask " + result.qnty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+             if (result.qty() > 0) System.out.println("Order created: limit ask " + result.qty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -121,7 +121,7 @@ public class CommandHandler {
 
         if (s.length == 4 && s[1].equals("bid") && s[2].equals("buy")) {
             SubmitResult result = engine.submitPegBuy(qty(s[3]));
-             if (result.qnty() > 0) System.out.println("Order created: peg buy " + result.qnty() + " id " + result.orderId());
+             if (result.qty() > 0) System.out.println("Order created: peg buy " + result.qty() + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -131,7 +131,7 @@ public class CommandHandler {
 
         if (s.length == 4 && s[1].equals("ask") && s[2].equals("sell")) {
             SubmitResult result = engine.submitPegSell(qty(s[3]));
-             if (result.qnty() > 0) System.out.println("Order created: peg sell "  + result.qnty() + " id " + result.orderId());
+             if (result.qty() > 0) System.out.println("Order created: peg sell "  + result.qty() + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
