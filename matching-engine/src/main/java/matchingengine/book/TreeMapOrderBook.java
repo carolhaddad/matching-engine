@@ -58,7 +58,6 @@ public BookSnapshot printBook() {
     List<BookSnapshot.Level> buyList = new ArrayList<>();
     List<BookSnapshot.Level> sellList = new ArrayList<>();
 
-    // BUY side (preço desc, tempo asc)
     for (Map.Entry<Long, PriorityQueue<Order>> entry : buys.entrySet()) {
         List<Order> level = new ArrayList<>(entry.getValue());
         level.sort(Comparator.comparingLong(Order::getTimePriority));
@@ -68,7 +67,6 @@ public BookSnapshot printBook() {
         }
     }
 
-    // SELL side (preço asc, tempo asc)
     for (Map.Entry<Long, PriorityQueue<Order>> entry : sells.entrySet()) {
         List<Order> level = new ArrayList<>(entry.getValue());
         level.sort(Comparator.comparingLong(Order::getTimePriority));

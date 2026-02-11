@@ -27,17 +27,19 @@ public class MatchingEngine {
     }
 
     public SubmitResult submitLimitBuy(long price, int qty) {
+        long bid = book.bidPrice();
         Order o = submit.submitLimitBuy(price, qty);
         List<TradeResult> trades = matcher.matchLimit(o);
-        if (o.getQty() > 0) {
+        if (o.getQty() > 0 && o.getPrice() > bid) {
             pegManager.updateBid(o.getPrice());
         }
         return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
     public SubmitResult submitLimitSell(long price, int qty) {
+        long ask = book.askPrice();
         Order o = submit.submitLimitSell(price, qty);
         List<TradeResult> trades = matcher.matchLimit(o);
-        if (o.getQty() > 0) {
+        if (o.getQty() > 0 && o.getPrice() < ask) {
             pegManager.updateAsk(o.getPrice());
         }        
         return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
