@@ -22,6 +22,7 @@ public class PegManagerTest {
 
     @Test
     void testPegBuyFollowsBid() {
+        // testa se o peg buy muda o preço corretamente ao atualizar
         Order buy1 = manager.createLimit(Order.Type.LIMIT, Order.Side.BUY, 1000, 100);
         book.add(buy1);
 

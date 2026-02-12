@@ -4,7 +4,6 @@ matchingengine\manager\PegManager.class
 matchingengine\dto\ModifyResult.class
 matchingengine\app\InvalidCommandException.class
 matchingengine\domain\Order$Type.class
-matchingengine\book\PriorityQueueOrderBook.class
 matchingengine\book\TreeMapOrderBook.class
 matchingengine\domain\Order$Side.class
 matchingengine\facade\MatchingEngine.class
@@ -14,7 +13,6 @@ matchingengine\dto\CancelResult.class
 matchingengine\dto\BookSnapshot.class
 matchingengine\book\OrderBook.class
 matchingengine\services\Matcher.class
-matchingengine\domain\Trade.class
 matchingengine\app\Main.class
 matchingengine\dto\TradeResult.class
 matchingengine\manager\OrderManager.class

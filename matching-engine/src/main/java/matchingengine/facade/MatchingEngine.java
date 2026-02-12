@@ -1,3 +1,5 @@
+//Fachada do sistema: orquestra Submit, Matcher, PegManager e OrderBook
+
 package matchingengine.facade;
 
 import java.util.*;
@@ -28,8 +30,11 @@ public class MatchingEngine {
 
     public SubmitResult submitLimitBuy(long price, int qty) {
         long bid = book.bidPrice();
+
         Order o = submit.submitLimitBuy(price, qty);
         List<TradeResult> trades = matcher.matchLimit(o);
+        
+        //só atualiza pegs se o novo preço se torna melhor bid (e se for entrar no book)
         if (o.getQty() > 0 && o.getPrice() > bid) {
             pegManager.updateBid(o.getPrice());
         }
@@ -46,6 +51,7 @@ public class MatchingEngine {
     }
 
     public SubmitResult submitLimitBid(long price, int qty) {
+        // se o preço informado for inferior ao melhor bid atual, ele é ajustado para o melhor bid.
         long bid = book.isEmpty(Order.Side.BUY) ? price : book.bidPrice();
         long finalPrice = Math.max(price, bid);
 
@@ -56,6 +62,7 @@ public class MatchingEngine {
         }
     return new SubmitResult(o.getId(), o.getPrice(), o.getQty(), trades);
     }
+    
     public SubmitResult submitLimitAsk(long price, int qty) {
         long ask = book.isEmpty(Order.Side.SELL) ? price : book.askPrice();
         long finalPrice = Math.min(price, ask);

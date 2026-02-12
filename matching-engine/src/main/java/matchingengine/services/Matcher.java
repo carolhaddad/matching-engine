@@ -23,7 +23,8 @@ public class Matcher {
     public List<TradeResult> matchLimit(Order order) {
         List<TradeResult> trades = new ArrayList<>();
 
-        if (order.getSide() == Order.Side.BUY) {
+        if (order.getSide() == Order.Side.BUY) { 
+            //só gera trade se o preço foi maior que o bid no livro
             while (order.getQty() > 0 && !book.isEmpty(Order.Side.SELL)
                     && book.askPrice() <= order.getPrice()) {
                   trades.add(executeTradeBook(order, book.ask()));
@@ -57,12 +58,13 @@ public class Matcher {
 
     private TradeResult executeTradeBook(Order newO, Order bookO) {
         int qty = Math.min(newO.getQty(), bookO.getQty());
+        //preço é sempre o da ordem que já estava no livro
         long price = bookO.getPrice();
 
         newO.setQty(newO.getQty() - qty);
         bookO.setQty(bookO.getQty() - qty);
 
-
+        //remove do livro e do peg (se estiver neles) quando executa inteira
         if (newO.getQty() == 0) {
             book.remove(newO);
             manager.remove(newO.getId());

@@ -43,6 +43,7 @@ public class Submit {
     }
     public Order submitPegBuy(int qty) {
         validate(1, qty);
+        //Se não existir bid no livro, o preço inicial da peg é 0
         long price = book.isEmpty(Order.Side.BUY) ? 0 : book.bidPrice();
         Order o = manager.createLimit(Order.Type.PEG, Order.Side.BUY, price, qty);
         pegManager.add(o);
@@ -74,7 +75,7 @@ public class Submit {
         book.remove(o);
 
         if (o.getType() == Order.Type.PEG) {
-            o.setQty(newQty);
+            o.setQty(newQty); //update peg não permite alteraçao de preço
         } else {
             o.setPrice(newPrice);
             o.setQty(newQty);
@@ -85,6 +86,7 @@ public class Submit {
         return true;
     }
 
+    //valida preço e quantidade antes de criar/modificar orderns
     private void validate(long price, int qty) {
         if (qty <= 0)
             throw new IllegalArgumentException("Quantity must be positive");

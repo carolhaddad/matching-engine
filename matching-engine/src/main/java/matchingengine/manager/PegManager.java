@@ -1,3 +1,5 @@
+//gerencia e guarda ordens PEG, atualizando preço quando bid/ask muda
+
 package matchingengine.manager;
 
 import java.util.*;
@@ -25,8 +27,10 @@ public class PegManager {
         else pegSell.remove(o);
     }
 
+    //update de preço NÃO gera trade automática
     public void updateBid(long bid) { 
         for (Order o : new ArrayList<>(pegBuy)) {
+            //remove e reinsere no livro para manter ordenação
             book.remove(o);
             o.setPrice(bid);
             book.add(o);

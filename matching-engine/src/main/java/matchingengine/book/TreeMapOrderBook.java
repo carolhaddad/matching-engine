@@ -1,3 +1,5 @@
+//Implementação do OrderBook usando TreeMap por níveis de preço e PriorityQueue para prioridade temporal
+
 package matchingengine.book;
 
 import java.util.*;
@@ -15,6 +17,7 @@ public class TreeMapOrderBook implements OrderBook {
         sells = new TreeMap<>();
     }
 
+    // Ordena por timePriority   
     private Comparator<Order> timeComparator() {
         return Comparator.comparingLong(Order::getTimePriority);
     }
@@ -53,7 +56,7 @@ public class TreeMapOrderBook implements OrderBook {
         return side == Order.Side.BUY ? buys.isEmpty() : sells.isEmpty();
     }
 
-
+//retorna um snapshot do livro
 public BookSnapshot printBook() {
     List<BookSnapshot.Level> buyList = new ArrayList<>();
     List<BookSnapshot.Level> sellList = new ArrayList<>();

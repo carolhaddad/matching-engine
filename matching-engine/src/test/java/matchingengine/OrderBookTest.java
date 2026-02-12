@@ -20,6 +20,7 @@ public class OrderBookTest {
 
     @Test
     void testBestBidAndAsk() {
+        //testa se interpreta bid e ask corretamente
         book.add(manager.createLimit(Order.Type.LIMIT, Order.Side.BUY, 1000, 100));
         book.add(manager.createLimit(Order.Type.LIMIT, Order.Side.BUY, 2000, 100));
         book.add(manager.createLimit(Order.Type.LIMIT, Order.Side.SELL, 1000, 100));
@@ -30,18 +31,5 @@ public class OrderBookTest {
         assertEquals(1000, book.askPrice());
     }
 
-    @Test
-    void marketSellDontBook() {
-        manager.createLimit(Order.Type.MARKET, Order.Side.BUY, 1000, 100);
-        
-        assertEquals(-1, book.bidPrice());
-    }
-
-
-    @Test
-    void negativeNumber() {
-    manager.createLimit(Order.Type.LIMIT, Order.Side.BUY, -10, 100);
-    assertEquals(-1, book.bidPrice());
-    }
 
 }

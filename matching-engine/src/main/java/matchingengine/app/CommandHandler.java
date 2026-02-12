@@ -1,8 +1,8 @@
 package matchingengine.app;
 
-import matchingengine.boundary.Price;
 import matchingengine.dto.*;
 import matchingengine.facade.MatchingEngine;
+import matchingengine.util.Price;
 
 public class CommandHandler {
 
@@ -50,7 +50,7 @@ public class CommandHandler {
     private static void limit(String[] s, MatchingEngine engine) {
 
         if (s.length == 4 && s[1].equals("buy")) {
-            SubmitResult result = engine.submitLimitBuy(price(s[2]), qty(s[3]));
+             SubmitResult result = engine.submitLimitBuy(price(s[2]), qty(s[3]));
              if (result.qty() > 0) System.out.println("Order created: buy " + result.qty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
@@ -82,7 +82,7 @@ public class CommandHandler {
 
         if (s.length == 5 && s[1].equals("ask") && s[2].equals("sell")) {
             SubmitResult result = engine.submitLimitAsk(price(s[3]), qty(s[4]));
-             if (result.qty() > 0) System.out.println("Order created: limit ask " + result.qty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
+            if (result.qty() > 0) System.out.println("Order created: limit ask " + result.qty() + " @ " + Price.toDouble(result.price()) + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -121,7 +121,7 @@ public class CommandHandler {
 
         if (s.length == 4 && s[1].equals("bid") && s[2].equals("buy")) {
             SubmitResult result = engine.submitPegBuy(qty(s[3]));
-             if (result.qty() > 0) System.out.println("Order created: peg buy " + result.qty() + " id " + result.orderId());
+            if (result.qty() > 0) System.out.println("Order created: peg buy " + result.qty() + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -131,7 +131,7 @@ public class CommandHandler {
 
         if (s.length == 4 && s[1].equals("ask") && s[2].equals("sell")) {
             SubmitResult result = engine.submitPegSell(qty(s[3]));
-             if (result.qty() > 0) System.out.println("Order created: peg sell "  + result.qty() + " id " + result.orderId());
+            if (result.qty() > 0) System.out.println("Order created: peg sell "  + result.qty() + " id " + result.orderId());
 
             for (TradeResult t : result.trades()) {
                 System.out.println("Trade, price: " + Price.toDouble(t.price()) + ", qty: " + t.qty());
@@ -160,7 +160,7 @@ public class CommandHandler {
         if (s.length == 5 && s[1].equals("order")) {
             ModifyResult result = engine.updateOrder(id(s[2]), price(s[3]), qty(s[4]));
 
-            if (result.success()) {
+            if (result.modified()) {
                 System.out.println("Order id " + result.orderId() + " Modified");
                 return;
             }
@@ -195,8 +195,6 @@ public class CommandHandler {
         throw new InvalidCommandException("Preço inválido");
     }
 }
-
-
     private static int qty(String s) {
     try {
         int i = Integer.parseInt(s);
@@ -206,7 +204,6 @@ public class CommandHandler {
         throw new InvalidCommandException("Quantidade inválida");
     }
 }
-
 
     private static long id(String s) {
         try {

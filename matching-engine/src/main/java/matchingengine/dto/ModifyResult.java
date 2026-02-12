@@ -2,7 +2,7 @@ package matchingengine.dto;
 
 public record ModifyResult(
     long orderId,
-    boolean success,
+    boolean modified,
     long newPrice,
     int newQty
 ) {}
