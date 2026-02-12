@@ -110,7 +110,6 @@ Order 2 canceled
 ## Análise de Complexidade
 
 - Inserção de ordens Limit/Peg: O(log N)
-- Execução de matching: O(log N)
 - Cancelamento e Modificação:
   - Obtençao de ordens por ID: O(1)
   - Remoção do heap: O(N)
