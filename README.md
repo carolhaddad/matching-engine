@@ -18,18 +18,18 @@ Este projeto estrutura uma matching engine simples para negociação de um únic
 
 ## Comandos Aceitos
 
-limit buy <price> <qty>
-limit sell <price> <qty>
-limit bid buy <price> <qty>
-limit ask sell <price> <qty>
-market buy <qty>
-market sell <qty>
-peg bid buy <qty>
-peg ask sell <qty>
-cancel order <id>
-modify order <id>
-print book
-exit
+limit buy `price` `qty`  
+limit sell `price` `qty`   
+limit bid buy `price` `qty`  
+limit ask sell `price` `qty`  
+market buy `qty`  
+market sell `qty`  
+peg bid buy `qty`  
+peg ask sell `qty`  
+cancel order `id`  
+modify order `id`  
+print book  
+exit  
 
 ### Observações
 - Comandos são case-insensitive (aceita letras maiúsculas e minúsculas)
@@ -49,31 +49,31 @@ exit
 
 ## Arquitetura do Projeto
 
-domain -> Entidades centrais (Order)
-book -> Estruturas de dados do Order Book
-manager -> Gerenciamento de IDs e Peg Orders
-dto -> Data Transfer Objects para encapsulamento
-services -> Algoritmo de matching e criação de ordens
-facade -> Fachada para acesso ao sistema
-util -> Funções utilitárias de conversão
-app -> Interface de entrada/saída (CLI)
-test -> Testes unitários e de integração (JUnit)
+domain -> Entidades centrais (Order)  
+book -> Estruturas de dados do Order Book  
+manager -> Gerenciamento de IDs e Peg Orders   
+dto -> Data Transfer Objects para encapsulamento  
+services -> Algoritmo de matching e criação de ordens  
+facade -> Fachada para acesso ao sistema  
+util -> Funções utilitárias de conversão  
+app -> Interface de entrada/saída (CLI)  
+test -> Testes unitários e de integração (JUnit)  
 
 ---
 
 ## Exemplo de Uso
 
-limit sell 20 200
-Order created: sell 200 @ 20 id 1
+limit sell 20 200  
+Order created: sell 200 @ 20 id 1  
 
-market buy 150
-Trade executed: price=20, qty=150
+market buy 150  
+Trade executed: price=20, qty=150  
 
-limit sell 10 100
-Order created: sell 100 @ 10 id 2
+limit sell 10 100  
+Order created: sell 100 @ 10 id 2  
 
-cancel order 2
-Order 2 canceled
+cancel order 2  
+Order 2 canceled  
 
 ---
 
@@ -144,7 +144,7 @@ Testes unitários, de integração e de erro com JUnit 5, cobrindo:
 ---
 
 ## Como rodar
-mvn clean compile
+mvn clean compile  
 mvn exec:java
 
 ---
