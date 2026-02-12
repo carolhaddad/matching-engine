@@ -1,6 +1,6 @@
 # Matching Engine
 
-Este projeto implementa uma Matching Engine simplificada para negociação de um único ativo, suportando diferentes tipos de ordens, execução de trades e manutenção de prioridade preço-tempo.
+Este projeto estrutura uma matching engine simples para negociação de um único ativo, suportando diferentes tipos de ordens, execução de trades e manutenção de prioridade preço-tempo.
 
 ---
 
