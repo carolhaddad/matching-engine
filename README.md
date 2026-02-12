@@ -143,6 +143,7 @@ Testes unitários, de integração e de erro com JUnit 5, cobrindo:
 ---
 
 ## Como rodar
+cd matching-engine   
 mvn clean compile  
 mvn exec:java
 
